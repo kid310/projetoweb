@@ -1,0 +1,1 @@
+console.log('Script do modal prontuario carregado.');
