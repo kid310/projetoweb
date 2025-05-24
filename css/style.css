@@ -1,3 +1,6 @@
+body { background-color: #f8f9fa; }
+.collapsed { width: 60px !important; }
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;

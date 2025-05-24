@@ -6,93 +6,56 @@
     <title>Sistema de Prontuário</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-
-    <div class="d-flex vh-100">
-        <!-- Menu Lateral -->
-        <div id="sidebar" class="bg-success text-white p-3 collapsed">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-4">Menu</h4>
-                <button class="btn btn-light btn-sm toggle-btn" onclick="toggleSidebar()">
-                    <span id="toggleIcon" class="bi bi-chevron-left"></span>
-                </button>
-            </div>
-            <ul class="nav flex-column">
-                <li class="nav-item mb-2">
-                    <a href="#" class="nav-link text-white" onclick="abrirModal('modal1')">Agendamento</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a href="#" class="nav-link text-white" onclick="abrirModal('modal2')">Pesquisas</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a href="#" class="nav-link text-white" onclick="abrirModal('modal3')">Prontuario eletronico</a>
-                </li>
-                <li class="nav-item mb-2">
-                    <a href="#" class="nav-link text-white" onclick="abrirModal('modal4')">Cobrança</a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Conteúdo Principal -->
-        <div class="p-4 flex-grow-1 bg-light">
-            <h2 class="text-success">Bem-vindo Henrique</h2>
-            <p class="text-muted">Selecione um menu à esquerda para abrir uma funcionalidade.</p>
-        </div>
-    </div>
-
-    <!-- Modais -->
-    <div class="modal fade" id="modal1" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Agendamento</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="modal2" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Pesquisas</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="modal3" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Prontuario eletronico</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="modal4" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Cobrança</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body"></div>
-        </div>
-      </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.js"></script>
     <script src="js/script.js"></script>
+</head>
+<body>
+
+<div class="d-flex vh-100">
+    <!-- Menu Lateral -->
+    <div id="sidebar" class="bg-success text-white p-3 collapsed">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-4">Menu</h4>
+            <button class="btn btn-light btn-sm toggle-btn" onclick="toggleSidebar()">
+                <span id="toggleIcon" class="bi bi-chevron-left"></span>
+            </button>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link text-white" onclick="abrirModal('agendamento')">Agendamento</a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link text-white" onclick="abrirModal('pesquisas')">Pesquisas</a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link text-white" onclick="abrirModal('prontuario')">Prontuario eletronico</a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link text-white" onclick="abrirModal('cobranca')">Cobrança</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="p-4 flex-grow-1 bg-light">
+        <h2 class="text-success">Bem-vindo Henrique</h2>
+        <p class="text-muted">Selecione um menu à esquerda para abrir uma funcionalidade.</p>
+    </div>
+</div>
+
+<!-- Modal genérico -->
+<div class="modal fade" id="modalContainer" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Título</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modalBody">...</div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
