@@ -1,9 +1,141 @@
-<p>Conteúdo do modal de Pesquisas.</p>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+<style>
 
-<!-- Botão de nova pesquisa -->
-<button id="btnNovaPesquisa">+ Nova Pesquisa</button>
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
-<!-- Lista de pesquisas -->
-<div id="listaPesquisas">
+body {
+  background: #f5f7fa;
+  margin: 20px;
+  line-height: 2;
+}
+
+/* Título */
+h2, h3 {
+  color: #146c43;
+}
+
+/* Botões principais */
+button {
+  background-color: #146c43;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  margin: 0 10px 10px 0;
+  border-radius: 5px;
+  font-weight: 700;
+  cursor: pointer;
   
-</div>
+}
+
+button:hover {
+  background-color: #13a25d;
+}
+
+/* Formulário */
+#formPesquisa {
+  display: none;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
+  max-width: 1000px;
+}
+
+/* Inputs e selects */
+input[type="text"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 6px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+/* Perguntas */
+
+.pergunta-radio label,
+.pergunta-texto label {
+  font-weight: 600;
+  color: #146c43;
+}
+
+.pergunta-radio .opcao input {
+  width: calc(50% - 12px);
+  margin-right: 12px;
+  margin-top: 5px;
+}
+
+/* Lista de pesquisas */
+.lista-pesquisa {
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin-top: 15px;
+  box-shadow: 0 2px 7px rgb(0 0 0 / 0.08);
+  max-width: 600px;
+}
+
+.lista-pesquisa strong {
+  font-size: 18px;
+  color: #146c43;
+}
+
+.lista-pesquisa button {
+  background-color: #e74c3c;
+  margin-top: 10px;
+}
+
+.lista-pesquisa button:hover {
+  background-color: #c0392b;
+}
+
+</style>
+</head>
+<body>
+
+  <!-- Botões principais -->
+  <button id="btnNovaPesquisa">+ Nova Pesquisa</button>
+  <button id="btnListarPesquisas">📄 Listar Pesquisas</button>
+
+  <!-- Área para exibir lista -->
+  <div id="listaPesquisas"></div>
+
+  <!-- Formulário de nova pesquisa -->
+  <div id="formPesquisa">
+    <h3>Cadastro de Pesquisa</h3>
+
+    <label for="nomePesquisa">Nome da pesquisa *</label>
+    <input type="text" id="nomePesquisa" required />
+
+    <label for="vinculoProntuario">Paciente *</label>
+    <select id="vinculoProntuario">
+      <option value="Paciente 1">Paciente 1</option>
+      <option value="Paciente 2">Paciente 2</option>
+    </select>
+
+    <label for="incidencia">Data de incidência *</label>
+    <input type="date" id="incidencia" required />
+
+    <div id="areaPerguntas"></div>
+
+    <button id="btnAddRadio" type="button">+ Pergunta objetiva</button>
+    <button id="btnAddTexto" type="button">+ Pergunta discursiva</button>
+    <br />
+    <button id="btnSalvarPesquisa" type="button">💾 Salvar</button>
+  </div>
+
+<script src="pesquisas.js"></script>
+
+</body>
+</html>
+
