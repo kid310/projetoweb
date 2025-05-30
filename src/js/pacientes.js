@@ -56,10 +56,9 @@ function listarPacientes(filtro = '') {
         <td>${paciente.preferenciaPagamento || ''}</td>
         <td>${formatarDataBR(paciente.inicioTratamento)}</td>
       <td class="d-flex flex-nowrap">
-  <button class="btn btn-info me-1 btnProntuario" data-index="${index}">Prontuário</button>
-  <button class="btn btn-info me-1 btnEditar" data-index="${index}">Editar</button>
-  <button class="btn btn-info btnExcluir" data-index="${index}">Excluir</button>
-</td>
+  <button class="btn me-1 btnProntuario" style="background-color: #FDE74C; color: black;" data-index="${index}">Prontuário</button>
+  <button class="btn me-1 btnEditar" style="background-color: #9BC53D; color: black;" data-index="${index}">Editar</button>
+  <button class="btn btnExcluir" style="background-color: #C3423F; color: black;" data-index="${index}">Excluir</button>
       `;
 
       listaPacientesEl.appendChild(linha);
