@@ -4,27 +4,25 @@ if (!window.eventos) {
 
     window.prontuarios = [{
     id: 1,
-    paciente: "Henrique Silva",
-    historico: "Consulta de rotina"
+    paciente: "Carlos Oliveira",
+    historico: "Consulta Terpeutica"
 }, {
     id: 2,
-    paciente: "Maria Oliveira",
-    historico: "Acompanhamento pós-operatório"
+    paciente: "Carol do Santos",
+    historico: "Consulta Terpeutica"
 }];
-
 
 function iniciarCalendario() {
     const calendarEl = document.getElementById('calendar');
     if (calendarEl) {
         const calendar = new FullCalendar.Calendar(calendarEl, {
             locale: 'pt-br',
-            height: 'parent', // Usa 100% da altura do container pai
+            height: 'parent', 
             contentHeight: 'auto',
             initialView: 'dayGridMonth',
             headerToolbar: {
                 left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                center: 'title'
             },
             events: window.eventos,
             dateClick: function(info) {
@@ -40,7 +38,6 @@ function iniciarCalendario() {
         calendar.render();
     }
 }
-
 
 function abrirModalAgendamento(data) {
       const options = window.prontuarios.map(p => 
@@ -70,21 +67,67 @@ function abrirModalAgendamento(data) {
         if (result.isConfirmed) {
             const novoEvento = result.value;
             eventos.push(novoEvento);
-            iniciarCalendario(); // Recarrega o calendário
+            iniciarCalendario(); 
+        }
+    });
+}
+
+function excluirEvento(evento) {
+    Swal.fire({
+        title: 'Confirmar exclusão?',
+        text: "Você não poderá reverter isso!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, excluir!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const eventoStart = evento.start.toISOString();
+            const eventoEnd = evento.end ? evento.end.toISOString() : null;
+            const eventoProntuario = evento.extendedProps.prontuario;
+
+            const index = window.eventos.findIndex(e => {
+                const eStart = new Date(e.start).toISOString();
+                const eEnd = e.end ? new Date(e.end).toISOString() : null;
+                return eStart === eventoStart && 
+                       eEnd === eventoEnd && 
+                       e.prontuario == eventoProntuario;
+            });
+            
+            if (index !== -1) {
+                window.eventos.splice(index, 1);
+                iniciarCalendario(); 
+                Swal.fire(
+                    'Excluído!',
+                    'O agendamento foi removido.',
+                    'success'
+                );
+            } else {
+                Swal.fire(
+                    'Erro!',
+                    'Agendamento não encontrado para exclusão.',
+                    'error'
+                );
+            }
         }
     });
 }
 
 function mostrarResumoEvento(evento) {
-    const prontuario = evento.extendedProps.prontuario;
+    const prontuarioId = evento.extendedProps.prontuario;
+    const prontuario = window.prontuarios.find(p => p.id == prontuarioId);
+    
     const infoProntuario = prontuario ? 
-        `<p><strong>Prontuário:</strong> ${prontuario.paciente}<br>
-        ${prontuario.historico}</p>` : '';
-    const start = new Date(evento.start).toLocaleString();
-    const end = evento.end ? new Date(evento.end).toLocaleString() : 'Sem término';
+        `<p><strong>Paciente:</strong> ${prontuario.paciente}<br>
+        <strong>Histórico:</strong> ${prontuario.historico}</p>` : '';
+    
+    const start = new Date(evento.start).toLocaleString('pt-BR');
+    const end = evento.end ? new Date(evento.end).toLocaleString('pt-BR') : 'Sem término';
 
     Swal.fire({
-        title: evento.title,
+        title: 'Detalhes do Agendamento',
         html: `
             <div style="text-align: left">
                 ${infoProntuario}
@@ -95,14 +138,12 @@ function mostrarResumoEvento(evento) {
         showCancelButton: true,
         confirmButtonText: 'Fechar',
         cancelButtonText: 'Excluir',
-        cancelButtonColor: '#d33'
+        cancelButtonColor: '#d33',
+        focusConfirm: false
     }).then((result) => {
         if (result.dismiss === Swal.DismissReason.cancel) {
-            eventos = eventos.filter(e => e !== evento.extendedProps);
-            iniciarCalendario();
+            excluirEvento(evento);
         }
     });
 }
-
-// Executa diretamente (sem DOMContentLoaded ou setTimeout)
 iniciarCalendario();
