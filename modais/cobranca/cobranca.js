@@ -1,5 +1,41 @@
-const registros = []
+// upload de arquivo na coluna de Comprovante
+// adicionar novas cobranças
+// pesquisar por nomes ou datas
+// limitar tamanho da tabela e adicionar páginas
+// navegar entre páginas
 
+if (localStorage.getItem("registros") == null) {
+    localStorage.setItem("registros", "")
+}
+
+function AtualizarTabela() {
+    if (localStorage.getItem("registros") === "") {
+        document.getElementById("tabela").innerHTML = "Nenhum registro foi adicionado"
+        return
+    }
+    const registrosLocal = JSON.parse(localStorage.getItem("registros"))
+    const registrosTabela = Array.prototype.slice.call(document.getElementById("tabela").children)
+    let repetido = false
+    let chaves = Object.keys(registrosLocal[0])
+    for (L = 0; L < registrosTabela.length; L++) {
+        for (C = 0; C < registrosLocal.length; C++) {
+            if (chaves[C] === "Comprovante") break
+
+            console.log(`Lt : ${registrosTabela[L].childNodes[C].innerHTML}`)
+            console.log(`Lc : ${registrosLocal[L][chaves[C]]}`)
+            console.log(C)
+
+
+
+        }
+
+    }
+    // console.log(registrosTabela[0].childNodes[0].innerHTML) //o primeiro é a linha e o segundo é a coluna
+    // console.log(registrosLocal[0]['Paciente'])
+    // console.log(Object.entries(registrosLocal[0])) //o primeiro é a linha e o segundo é a coluna
+    // console.log(registrosTabela[0].children[0].innerHTML)
+    // console.log(teste[0])
+}
 function Registrar(Paciente, Atendimento, Horario, Valor, Vencimento, Comprovante, Situacao) {
     const tabela = document.getElementById("tabela")
     const linha = document.createElement("tr")
@@ -12,6 +48,21 @@ function Registrar(Paciente, Atendimento, Horario, Valor, Vencimento, Comprovant
         Comprovante,
         Situacao
     }
+    // Verificando se tem algum registro exatamente igual já adicionado
+    if (localStorage.getItem('registros') === "") {
+        localStorage.setItem('registros', JSON.stringify([registro]))
+    } else {
+        const novaArray = JSON.parse(localStorage.getItem("registros"))
+        for (R of novaArray) {
+            if (JSON.stringify(registro) == JSON.stringify(R)) {
+                // console.log(`Este registro já está incluso.`)
+                // return
+            }
+        }
+        novaArray.push(registro)
+        localStorage.setItem('registros', JSON.stringify(novaArray))
+    }
+
     for (dado in registro) {
         const coluna = document.createElement("td")
         const span = document.createElement("span")
@@ -28,7 +79,6 @@ function Registrar(Paciente, Atendimento, Horario, Valor, Vencimento, Comprovant
             span.className = `badge ${classe} p-2`
             coluna.appendChild(span)
             linha.appendChild(coluna)
-            console.log(coluna)
         } else if (dado == "Comprovante") {
             coluna.innerHTML = `
             <button class="btn btn-light btn-upload"><i class="bi bi-upload"></i></button>
@@ -38,17 +88,27 @@ function Registrar(Paciente, Atendimento, Horario, Valor, Vencimento, Comprovant
             coluna.innerHTML = registro[dado]
             linha.appendChild(coluna)
         }
-
-        // console.log(dado)
+        tabela.appendChild(linha)
     }
-    tabela.appendChild(linha)
-    registros.push(registro)
+    // console.log(JSON.parse(localStorage.getItem("registros")))
 }
 
-// const coisa = new Registro("helenaldo","e","s","d","s","ds","sd")
+document.getElementById("registroForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const paciente = document.getElementById("paciente").value;
+    const atendimento = document.getElementById("atendimento").value;
+    const horario = document.getElementById("horario").value;
+    const valor = document.getElementById("valor").value;
+    const vencimento = document.getElementById("vencimento").value;
+    const situacao = document.getElementById("situacao").value;
+
+    Registrar(paciente, atendimento, horario, valor, vencimento, "bi bi-upload", situacao);
+})
+
 Registrar("Gabriel Machado", "24/05/2025", "16:00", "R$200", "17/08/2024", "bi bi-upload", "PENDENTE");
 Registrar("Helenaldo da Silva", "24/05/2025", "9:30", "R$200", "18/08/2024", "bi bi-upload", "PAGO");
 Registrar("Henrique Shroeder", "17/05/2025", "20:00", "R$200", "29/08/2024", "bi bi-upload", "PAGO");
 Registrar("Igor Sodré", "17/05/2025", "18:30", "R$200", "18/08/2024", "bi bi-upload", "CANCELADO");
 Registrar("Igor Sodré", "17/05/2025", "18:30", "R$200", "18/08/2024", "bi bi-upload", "CANCELADO");
-
+AtualizarTabela()
