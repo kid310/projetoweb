@@ -1,13 +1,15 @@
-// upload de arquivo na coluna de Comprovante
 // adicionar novas cobranças
 // pesquisar por nomes ou datas
 // limitar tamanho da tabela e adicionar páginas
 // navegar entre páginas
 
+// OPCIONAL
+// upload de arquivo na coluna de Comprovante
+// gerar um qrcode de pagamento
+
 if (localStorage.getItem("registros") == null) {
     localStorage.setItem("registros", "")
 }
-
 function AtualizarTabela() {
     if (localStorage.getItem("registros") === "") {
         document.getElementById("tabela").innerHTML = "Nenhum registro foi adicionado"
@@ -19,16 +21,17 @@ function AtualizarTabela() {
     let chaves = Object.keys(registrosLocal[0])
     for (L = 0; L < registrosTabela.length; L++) {
         for (C = 0; C < registrosLocal.length; C++) {
-            if (chaves[C] === "Comprovante") break
-
-            console.log(`Lt : ${registrosTabela[L].childNodes[C].innerHTML}`)
-            console.log(`Lc : ${registrosLocal[L][chaves[C]]}`)
-            console.log(C)
-
-
-
+            if (chaves[C] === "Comprovante" || registrosLocal[L][chaves[C]] !== registrosTabela[L].childNodes[C].innerHTML) continue
+            // console.log(`Lt : ${registrosTabela[L].childNodes[C].innerHTML}`)
+            // console.log(`Lc : ${registrosLocal[L][chaves[C]]}`)
+            // console.log(`Lc : ${registrosLocal[L]}`)
         }
-
+        // console.log(registrosLocal[L])
+        if (C === 5) break
+    }
+    if (L === registrosTabela.length) {
+        AumentarTabela(registrosLocal[L])
+        if (registrosTabela.length < registrosLocal.length) AtualizarTabela()
     }
     // console.log(registrosTabela[0].childNodes[0].innerHTML) //o primeiro é a linha e o segundo é a coluna
     // console.log(registrosLocal[0]['Paciente'])
@@ -37,8 +40,6 @@ function AtualizarTabela() {
     // console.log(teste[0])
 }
 function Registrar(Paciente, Atendimento, Horario, Valor, Vencimento, Comprovante, Situacao) {
-    const tabela = document.getElementById("tabela")
-    const linha = document.createElement("tr")
     const registro = {
         Paciente,
         Atendimento,
@@ -55,13 +56,20 @@ function Registrar(Paciente, Atendimento, Horario, Valor, Vencimento, Comprovant
         const novaArray = JSON.parse(localStorage.getItem("registros"))
         for (R of novaArray) {
             if (JSON.stringify(registro) == JSON.stringify(R)) {
-                // console.log(`Este registro já está incluso.`)
-                // return
+                console.log(`Este registro já está incluso.`)
+                return
             }
         }
         novaArray.push(registro)
         localStorage.setItem('registros', JSON.stringify(novaArray))
     }
+    AtualizarTabela()
+
+}
+
+function AumentarTabela(registro) {
+    const tabela = document.getElementById("tabela")
+    const linha = document.createElement("tr")
 
     for (dado in registro) {
         const coluna = document.createElement("td")
@@ -90,7 +98,6 @@ function Registrar(Paciente, Atendimento, Horario, Valor, Vencimento, Comprovant
         }
         tabela.appendChild(linha)
     }
-    // console.log(JSON.parse(localStorage.getItem("registros")))
 }
 
 document.getElementById("registroForm").addEventListener("submit", function (event) {
