@@ -11,33 +11,32 @@ if (localStorage.getItem("registros") == null) {
     localStorage.setItem("registros", "")
 }
 function AtualizarTabela() {
-    if (localStorage.getItem("registros") === "") {
-        document.getElementById("tabela").innerHTML = "Nenhum registro foi adicionado"
-        return
+    const tabela = document.getElementById("tabela");
+
+    // Verificação inicial
+    const dados = localStorage.getItem("registros");
+    if (!dados || dados === "[]") {
+        tabela.innerHTML = `<tr id="tabelaVazia"><td colspan='5'>Nenhum registro foi adicionado</td></tr>`;
+        return;
     }
-    const registrosLocal = JSON.parse(localStorage.getItem("registros"))
-    const registrosTabela = Array.prototype.slice.call(document.getElementById("tabela").children)
-    let repetido = false
-    let chaves = Object.keys(registrosLocal[0])
-    for (L = 0; L < registrosTabela.length; L++) {
-        for (C = 0; C < registrosLocal.length; C++) {
-            if (chaves[C] === "Comprovante" || registrosLocal[L][chaves[C]] !== registrosTabela[L].childNodes[C].innerHTML) continue
-            // console.log(`Lt : ${registrosTabela[L].childNodes[C].innerHTML}`)
-            // console.log(`Lc : ${registrosLocal[L][chaves[C]]}`)
-            // console.log(`Lc : ${registrosLocal[L]}`)
+
+    const registrosLocal = JSON.parse(dados);
+    const linhasTabela = Array.from(tabela.getElementsByTagName("tr"));
+
+    registrosLocal.forEach((registro) => {
+        const jaExiste = linhasTabela.some((linha) => {
+            const colunas = Array.from(linha.children);
+            return Object.entries(registro).every(([chave, valor], index) => {
+                if (chave === "Comprovante") return true; // Ignora "Comprovante"
+                return colunas[index]?.innerText === String(valor);
+            });
+        });
+
+        if (!jaExiste) {
+
+            AumentarTabela(registro);
         }
-        // console.log(registrosLocal[L])
-        if (C === 5) break
-    }
-    if (L === registrosTabela.length) {
-        AumentarTabela(registrosLocal[L])
-        if (registrosTabela.length < registrosLocal.length) AtualizarTabela()
-    }
-    // console.log(registrosTabela[0].childNodes[0].innerHTML) //o primeiro é a linha e o segundo é a coluna
-    // console.log(registrosLocal[0]['Paciente'])
-    // console.log(Object.entries(registrosLocal[0])) //o primeiro é a linha e o segundo é a coluna
-    // console.log(registrosTabela[0].children[0].innerHTML)
-    // console.log(teste[0])
+    });
 }
 function Registrar(Paciente, Atendimento, Horario, Valor, Vencimento, Comprovante, Situacao) {
     const registro = {
@@ -57,6 +56,7 @@ function Registrar(Paciente, Atendimento, Horario, Valor, Vencimento, Comprovant
         for (R of novaArray) {
             if (JSON.stringify(registro) == JSON.stringify(R)) {
                 console.log(`Este registro já está incluso.`)
+                AtualizarTabela()
                 return
             }
         }
@@ -70,6 +70,9 @@ function Registrar(Paciente, Atendimento, Horario, Valor, Vencimento, Comprovant
 function AumentarTabela(registro) {
     const tabela = document.getElementById("tabela")
     const linha = document.createElement("tr")
+    if (document.getElementById("tabelaVazia") !== null){
+        document.getElementById("tabelaVazia").remove();
+    }
 
     for (dado in registro) {
         const coluna = document.createElement("td")
@@ -100,6 +103,8 @@ function AumentarTabela(registro) {
     }
 }
 
+
+
 document.getElementById("registroForm").addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -111,11 +116,26 @@ document.getElementById("registroForm").addEventListener("submit", function (eve
     const situacao = document.getElementById("situacao").value;
 
     Registrar(paciente, atendimento, horario, valor, vencimento, "bi bi-upload", situacao);
+
+    document.getElementById("paciente").value = ""
+    document.getElementById("atendimento").value = ""
+    document.getElementById("horario").value = ""
+    document.getElementById("valor") = ""
+    document.getElementById("vencimento").value = ""
+    document.getElementById("situacao").value = ""
+
+    document.getElementById("fechaOffcanvas").click()
 })
 
-Registrar("Gabriel Machado", "24/05/2025", "16:00", "R$200", "17/08/2024", "bi bi-upload", "PENDENTE");
-Registrar("Helenaldo da Silva", "24/05/2025", "9:30", "R$200", "18/08/2024", "bi bi-upload", "PAGO");
-Registrar("Henrique Shroeder", "17/05/2025", "20:00", "R$200", "29/08/2024", "bi bi-upload", "PAGO");
-Registrar("Igor Sodré", "17/05/2025", "18:30", "R$200", "18/08/2024", "bi bi-upload", "CANCELADO");
-Registrar("Igor Sodré", "17/05/2025", "18:30", "R$200", "18/08/2024", "bi bi-upload", "CANCELADO");
+Registrar("Gabriel Machado", "24/05/2025", "16:00", "R$200", "08/06/2025", "bi bi-upload", "PENDENTE");
+Registrar("Helenaldo da Silva", "24/05/2025", "9:30", "R$200", "08/06/2025", "bi bi-upload", "PAGO");
+Registrar("Henrique Shroeder", "17/05/2025", "20:00", "R$200", "08/06/2025", "bi bi-upload", "PAGO");
+Registrar("Igor Sodré", "17/05/2025", "18:30", "R$200", "08/06/2025", "bi bi-upload", "CANCELADO");
+Registrar("Gabriel Machado", "24/05/2025", "16:00", "R$200", "08/06/2025", "bi bi-upload", "PENDENTE");
+Registrar("Helenaldo da Silva", "24/05/2025", "9:30", "R$200", "08/06/2025", "bi bi-upload", "PAGO");
+Registrar("Henrique Shroeder", "17/05/2025", "20:00", "R$200", "08/06/2025", "bi bi-upload", "PAGO");
+Registrar("Igor Sodré", "17/05/2025", "18:30", "R$200", "08/06/2025", "bi bi-upload", "CANCELADO");
+Registrar("Gabriel Machado", "24/05/2025", "16:00", "R$200", "08/06/2025", "bi bi-upload", "PENDENTE");
+Registrar("Helenaldo da Silva", "24/05/2025", "9:30", "R$200", "08/06/2025", "bi bi-upload", "PAGO");
+
 AtualizarTabela()

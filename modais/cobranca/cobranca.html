@@ -24,6 +24,10 @@
             overflow: hidden;
         }
 
+        .table {
+            margin-bottom: 0;
+        }
+
         .status-pendente {
             background-color: #bdc3c7;
             color: white;
@@ -66,8 +70,10 @@
                     <span class="input-group-text"><i class="bi bi-search"></i></span>
                     <input type="text" class="form-control" placeholder="Pesquise por paciente">
                 </div>
-
-                <button class="btn btn-light border"><i class="bi bi-qr-code me-2"></i>GERAR LINK DE PAGAMENTO</button>
+                <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#formOffcanvas">
+                    Adicionar Registro
+                    <button class="btn btn-light border"><i class="bi bi-qr-code me-2"></i>GERAR LINK DE
+                        PAGAMENTO</button>
             </div>
 
             <div class="table-container">
@@ -88,81 +94,74 @@
                     </tbody>
                 </table>
             </div>
-            <div id="fundo">
-                <div id="page-skip" class="d-flex justify-content-center mt-3">
-                    <nav>
-                        <ul class="pagination">
-                            <li class="page-item"><a class="page-link" href="#">‹</a></li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">›</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <!-- Botão para abrir o modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registroModal">
-                    Adicionar Registro
+
+            <div id="page-skip" class="d-flex justify-content-evenly mt-3">
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">‹</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">›</a></li>
+                    </ul>
+                </nav>
+
                 </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form id="registroForm">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="registroModalLabel">Novo Registro</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Fechar"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label for="paciente" class="form-label">Paciente</label>
-                                        <input type="text" class="form-control" id="paciente" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="atendimento" class="form-label">Data do Atendimento</label>
-                                        <input type="date" class="form-control" id="atendimento" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="horario" class="form-label">Horário</label>
-                                        <input type="time" class="form-control" id="horario" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="valor" class="form-label">Valor</label>
-                                        <input type="text" class="form-control" id="valor" value="R$200" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="vencimento" class="form-label">Vencimento</label>
-                                        <input type="date" class="form-control" id="vencimento" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="situacao" class="form-label">Status</label>
-                                        <select class="form-select" id="situacao" required>
-                                            <option value="PENDENTE">Pendente</option>
-                                            <option value="PAGO">Pago</option>
-                                            <option value="CANCELADO">Cancelado</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-success">Salvar</button>
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cancelar</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+            <!-- Botão para abrir o modal -->
+            <!-- Esse botão pode estar dentro de um modal ou da página -->
 
-        </div>
-        <div>
+
+
+
+            <!-- Modal -->
+            <!-- Coloque isso no modal secundário -->
+
 
         </div>
     </div>
-
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="formOffcanvas" aria-labelledby="formOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="formOffcanvasLabel">Novo Registro</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar" id="fechaOffcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form id="registroForm">
+                <div class="mb-3">
+                    <label for="paciente" class="form-label">Paciente</label>
+                    <input type="text" class="form-control" id="paciente" required>
+                </div>
+                <div class="mb-3">
+                    <label for="atendimento" class="form-label">Atendimento</label>
+                    <input type="date" class="form-control" id="atendimento" required>
+                </div>
+                <div class="mb-3">
+                    <label for="horario" class="form-label">Horário</label>
+                    <input type="time" class="form-control" id="horario" required>
+                </div>
+                <div class="mb-3">
+                    <label for="valor" class="form-label">Valor</label>
+                    <input type="text" class="form-control" id="valor" required>
+                </div>
+                <div class="mb-3">
+                    <label for="vencimento" class="form-label">Vencimento</label>
+                    <input type="date" class="form-control" id="vencimento" required>
+                </div>
+                <div class="mb-3">
+                    <label for="situacao" class="form-label">Situação</label>
+                    <select class="form-select" id="situacao" required>
+                        <option value="PENDENTE">PENDENTE</option>
+                        <option value="PAGO">PAGO</option>
+                        <option value="CANCELADO">CANCELADO</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Registrar</button>
+            </form>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 
 </html>
