@@ -113,7 +113,7 @@ function Registrar(Paciente, Atendimento, Horario, Valor, Vencimento, Comprovant
 
     let registros = JSON.parse(localStorage.getItem("registros")) || [];
 
-    if (registros.some(r => JSON.stringify(r) === JSON.stringify(registro))) return;
+    if (registros.some(r => JSON.stringify(r) === JSON.stringify(registro)) || registro[Paciente] == "") return;
 
     registros.push(registro);
     localStorage.setItem("registros", JSON.stringify(registros));
@@ -129,6 +129,7 @@ function AumentarTabela(registro, indexReal) {
         const coluna = document.createElement("td");
 
         if (dado === "Situacao") {
+            if (registro[dado] === "") return
             const span = document.createElement("span");
             span.innerHTML = registro[dado];
             span.className = `badge p-2 ${registro[dado] === "PAGO"
@@ -215,6 +216,5 @@ Registrar("Henrique Shroeder", "2025-05-16", "20:00", "200", "2025-08-08", "bi b
 Registrar("Igor Sodré", "2025-05-16", "18:30", "200", "2025-08-08", "bi bi-upload", "CANCELADO");
 Registrar("Henrique Shroeder", "2025-05-14", "20:00", "200", "2025-08-08", "bi bi-upload", "PAGO");
 Registrar("Igor Sodré", "2025-05-14", "18:30", "200", "2025-08-08", "bi bi-upload", "CANCELADO");
-Registrar("Igor Sodré", "2025-05-12", "18:30", "200", "2025-08-08", "bi bi-upload", "CANCELADO");
 Registrar("Igor Sodré", "2025-05-12", "18:30", "200", "2025-08-08", "bi bi-upload", "CANCELADO");
 AtualizarTabela()
