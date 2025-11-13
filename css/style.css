@@ -1,0 +1,156 @@
+body { background-color: #f8f9fa; }
+.collapsed { width: 60px !important; }
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#sidebar {
+    width: 250px;
+    transition: width 0.3s, padding 0.3s;
+    overflow: hidden;
+}
+
+#sidebar.collapsed {
+    width: 60px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#sidebar.collapsed h4,
+#sidebar.collapsed ul li a {
+    display: none;
+}
+
+.toggle-btn {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-btn:hover {
+    background-color: #343a40;
+}
+
+.toggle-btn {
+    background-color: #343a40; 
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.toggle-btn:hover {
+    background-color: #146c43; 
+}
+
+/* Adicione no seu CSS */
+#calendar {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.fc-toolbar {
+    background: #28a745 !important; /* Verde principal */
+    padding: 15px;
+    color: white !important;
+}
+
+.fc-toolbar-title {
+    color: white !important;
+    font-weight: 600;
+}
+
+.fc-button-primary {
+   background-color: #1e7e34 !important;
+    border-color: #1c7430 !important;
+}
+
+.fc-col-header-cell {
+    background: #e9ecef !important; /* Cinza médio */
+    color: #495057;
+    padding: 10px 0;
+}
+
+.fc-daygrid-day {
+    background: white;
+    border: 1px solid #dee2e6 !important;
+}
+
+.fc-day-other {
+    background: #f1f3f5 !important; /* Cinza claro */
+    color: #868e96 !important;
+}
+
+.fc-button-primary:hover {
+    background-color: #2980b9 !important;
+    border-color: #2980b9 !important;
+}
+
+.fc-event {
+    background-color: #2ecc71;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 5px;
+}
+
+.swal2-input:focus {
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3) !important;
+}
+
+.swal2-popup {
+    border-radius: 15px !important;
+}
+
+/* Garante que o modal ocupe toda a tela */
+.modal-fullscreen {
+    width: 100vw;
+    max-width: none;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Ajusta o conteúdo do modal */
+.modal-content {
+    height: 100vh;
+    border-radius: 0;
+    border: none;
+}
+
+.modal-body {
+  padding: 0 !important;
+  overflow: hidden; /* Remove rolagem interna */
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.fc-daygrid-day-events {
+  overflow-y: auto;
+  max-height: 120px; /* Altura máxima por célula */
+}
+
+.swal2-select {
+    width: 70% !important;
+    margin-bottom: 1rem !important;
+    padding: 0.5rem !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+}
