@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Fundo gradiente -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0066CC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#003DA5;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <circle cx="100" cy="100" r="100" fill="url(#bgGradient)"/>
+  
+  <!-- Letra U estilizada (Unisinos) -->
+  <g transform="translate(100, 100)">
+    <!-- Círculo interno -->
+    <circle cx="0" cy="0" r="70" fill="none" stroke="white" stroke-width="12"/>
+    
+    <!-- Letra U -->
+    <text x="0" y="25" font-size="80" font-weight="bold" fill="white" text-anchor="middle" font-family="Arial, sans-serif">U</text>
+  </g>
+</svg>

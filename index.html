@@ -3,64 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Prontuário</title>
+    <title>Login - Sistema de Gestão Acadêmica Uniesquina</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.css' rel='stylesheet' />
-    <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/main.min.css' rel='stylesheet' />
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.global.min.js'></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="js/fullcalendar-6.1.17/dist/index.global.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.js"></script>
-    <script src="js/script.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f5ff 0%, #e6f0ff 50%, #f8f9ff 100%);
+            min-height: 100vh;
+        }
+
+        .login-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Seção Esquerda - Logo e Branding */
+        .login-left {
+            flex: 1;
+            background: linear-gradient(135deg, #0066CC 0%, #003DA5 50%, #004a8d 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-left::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .login-left::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -50px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .logo-wrapper {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .logo-svg {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+        }
+
+        .brand-text h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .brand-text p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 40px;
+        }
+
+        .brand-text small {
+            display: block;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 20px;
+        }
+
+        /* Seção Direita - Formulário */
+        .login-right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .login-form-wrapper {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-form-wrapper h2 {
+            color: #0066CC;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .login-form-wrapper p {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            color: #0066CC;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #0066CC;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+
+        .form-group input:read-only {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .demo-notice {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            border-left: 4px solid #ffc107;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            color: #856404;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #0066CC 0%, #003DA5 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 102, 204, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 30px;
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+            }
+
+            .login-left {
+                min-height: 300px;
+            }
+
+            .logo-svg {
+                width: 120px;
+                height: 120px;
+            }
+
+            .brand-text h1 {
+                font-size: 2rem;
+            }
+
+            .login-form-wrapper h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<div class="d-flex vh-100">
-    <!-- Menu Lateral -->
-    <div id="sidebar" class="bg-success text-white p-3 collapsed">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4 class="mb-4">Menu</h4>
-            <button class="btn btn-light btn-sm toggle-btn" onclick="toggleSidebar()">
-                <span id="toggleIcon" class="bi bi-chevron-left"></span>
-            </button>
+<div class="login-container">
+    <!-- Seção Esquerda -->
+    <div class="login-left">
+        <div class="logo-wrapper">
+            <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                <defs>
+                    <linearGradient id="logoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95" />
+                        <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.85" />
+                    </linearGradient>
+                </defs>
+                <circle cx="100" cy="100" r="95" fill="url(#logoBg)"/>
+                <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="3"/>
+                <text x="100" y="130" font-size="90" font-weight="bold" fill="#0066CC" text-anchor="middle" font-family="Arial, sans-serif">U</text>
+            </svg>
+            <div class="brand-text">
+                <h1>Uniesquina</h1>
+                <p>Gestão Acadêmica</p>
+                <small>🎓 Matrículas 2026/1</small>
+            </div>
         </div>
-        <ul class="nav flex-column">
-            <li class="nav-item mb-2">
-                <a href="#" class="nav-link text-white" onclick="abrirModal('agendamento')">Agendamento</a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="#" class="nav-link text-white" onclick="abrirModal('admin')">Turmas</a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="#" class="nav-link text-white" onclick="abrirModal('prontuario')">Prontuario eletronico</a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="#" class="nav-link text-white" onclick="abrirModal('cobranca')">Cobrança</a>
-            </li>
-        </ul>
     </div>
 
-    <!-- Conteúdo Principal -->
-    <div class="p-4 flex-grow-1 bg-light">
-        <h2 class="text-success">Bem-vindo Henrique</h2>
-        <p class="text-muted">Selecione um menu à esquerda para abrir uma funcionalidade.</p>
+    <!-- Seção Direita -->
+    <div class="login-right">
+        <div class="login-form-wrapper">
+            <h2>Entrar</h2>
+            <p>Acesse sua conta para continuar</p>
+
+            <div class="demo-notice">
+                <strong>⚠️ Modo Demo:</strong> Use os campos abaixo para acessar o sistema. Campos com ícone 🔒 são somente leitura.
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="email">Email 🔒</label>
+                    <input type="email" id="email" name="email" value="admin@uniesquina.edu.br" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="senha">Senha 🔒</label>
+                    <input type="password" id="senha" name="senha" value="uniesquina123" readonly>
+                </div>
+
+                <button type="submit" class="login-btn">
+                    <i class="bi bi-lock"></i> Entrar no Sistema
+                </button>
+            </form>
+
+            <div class="footer-text">
+                <p>Sistema de Gestão Acadêmica v1.0</p>
+                <p>Universidade Uniesquina</p>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Modal genérico -->
-<div class="modal fade" id="modalContainer" tabindex="-1">
-  <div class="modal-dialog modal-fullscreen">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalTitle">Título</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body" id="modalBody">...</div>
-    </div>
-  </div>
-</div>
+<script>
+    function handleLogin(event) {
+        event.preventDefault();
+        
+        // Usar a parte do email antes do @ como nome de usuário
+        const email = document.getElementById('email').value;
+        const nomeUsuario = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
+        
+        // Salvar nome do usuário no localStorage
+        localStorage.setItem('nomeUsuario', nomeUsuario);
+        
+        // Redirecionar para o dashboard
+        window.location.href = 'dashboard.html';
+    }
+</script>
 
 </body>
 </html>

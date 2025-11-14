@@ -9,6 +9,15 @@ function abrirModal(modalName) {
             document.getElementById('modalBody').innerHTML = html;
             const modal = new bootstrap.Modal(document.getElementById('modalContainer'));
             
+            // Fechar sidebar ao abrir modal
+            const sidebar = document.getElementById('sidebar');
+            const icon = document.getElementById('toggleIcon');
+            if (!sidebar.classList.contains('collapsed')) {
+                sidebar.classList.add('collapsed');
+                icon.classList.remove('bi-chevron-left');
+                icon.classList.add('bi-chevron-right');
+            }
+            
             // Adicione este listener
             modal._element.addEventListener('shown.bs.modal', () => {
                 const script = document.createElement('script');

@@ -38,7 +38,7 @@ btnSalvarTurma.addEventListener("click", () => {
   const turno = turnoInput.value.trim();
 
   if (!disciplina || !professor || !dia || !turno) {
-    alert("Preencha todos os campos obrigatórios.");
+    toast.warning('Aviso', 'Preencha todos os campos obrigatórios.');
     return;
   }
 
@@ -58,7 +58,8 @@ btnSalvarTurma.addEventListener("click", () => {
   diaInput.value = "";
 
   formTurma.style.display = "none";
-  alert("Turma cadastrada com sucesso!");
+  toast.success('Turma Cadastrada', `${disciplina} foi adicionada com sucesso!`);
+  renderizarTurmas();
 });
 
 // Renderizar lista
