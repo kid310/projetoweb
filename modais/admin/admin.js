@@ -1,94 +1,98 @@
+(function() {
 const $ = (id) => document.getElementById(id);
 
-// Botões
-const btnNovaTurma = $("btnNovaTurma");
-const btnListarTurmas = $("btnListarTurmas");
-const btnSalvarTurma = $("btnSalvarTurma");
-
-// Elementos de interface
-const formTurma = $("formTurma");
-const listaTurmas = $("listaTurmas");
-
-// Campos do formulário
-const disciplinaInput = $("disciplina");
-const professorInput = $("professor");
-const diaInput = $("dia");
-const turnoInput = $("turno");
-
-// Banco local
 let turmas = JSON.parse(localStorage.getItem("turmas")) || [];
 
-// Mostrar formulário
-btnNovaTurma.addEventListener("click", () => {
-  formTurma.style.display = "block";
-  listaTurmas.innerHTML = "";
-});
+function inicializar() {
+  const btnNovaTurma = $("btnNovaTurma");
+  const btnListarTurmas = $("btnListarTurmas");
+  const btnSalvarTurma = $("btnSalvarTurma");
 
-// Mostrar lista
-btnListarTurmas.addEventListener("click", () => {
+  const formTurma = $("formTurma");
+  const listaTurmas = $("listaTurmas");
+
+  const disciplinaInput = $("disciplina");
+  const professorInput = $("professor");
+  const diaInput = $("dia");
+  const turnoInput = $("turno");
+
   renderizarTurmas();
-  formTurma.style.display = "none";
-});
 
-// Salvar turma
-btnSalvarTurma.addEventListener("click", () => {
-  const disciplina = disciplinaInput.value.trim();
-  const professor = professorInput.value.trim();
-  const dia = diaInput.value.trim();
-  const turno = turnoInput.value.trim();
+  btnNovaTurma.addEventListener("click", () => {
+    formTurma.style.display = "block";
+    listaTurmas.innerHTML = "";
+  });
 
-  if (!disciplina || !professor || !dia || !turno) {
-    toast.warning('Aviso', 'Preencha todos os campos obrigatórios.');
-    return;
+  btnListarTurmas.addEventListener("click", () => {
+    renderizarTurmas();
+    formTurma.style.display = "none";
+  });
+
+  btnSalvarTurma.addEventListener("click", () => {
+    const disciplina = disciplinaInput.value.trim();
+    const professor = professorInput.value.trim();
+    const dia = diaInput.value.trim();
+    const turno = turnoInput.value.trim();
+
+    if (!disciplina || !professor || !dia || !turno) {
+      alert('Preencha todos os campos obrigatórios.');
+      return;
+    }
+
+    const turma = {
+      id: Date.now(),
+      disciplina,
+      professor,
+      dia,
+      turno
+    };
+
+    turmas.push(turma);
+    localStorage.setItem("turmas", JSON.stringify(turmas));
+
+    disciplinaInput.value = "";
+    professorInput.value = "";
+    diaInput.value = "";
+    turnoInput.value = "";
+
+    formTurma.style.display = "none";
+    alert(`${disciplina} foi adicionada com sucesso!`);
+    renderizarTurmas();
+  });
+
+  function renderizarTurmas() {
+    if (turmas.length === 0) {
+      listaTurmas.innerHTML = "<p>Nenhuma turma cadastrada.</p>";
+      return;
+    }
+
+    const cores = ['cor-1', 'cor-2', 'cor-3', 'cor-4', 'cor-5', 'cor-6'];
+
+    listaTurmas.innerHTML = turmas
+      .map(
+        (t, i) => `
+        <div class="lista-turma ${cores[i % cores.length]}">
+          <div>
+            <strong>${t.disciplina}</strong>
+            <p><strong>Professor:</strong> ${t.professor}</p>
+            <p><strong>Dia:</strong> ${t.dia}</p>
+            <p><strong>Turno:</strong> ${t.turno}</p>
+          </div>
+          <button onclick="excluirTurma(${i})">🗑️ Excluir</button>
+        </div>
+      `
+      )
+      .join("");
   }
 
-  const turma = {
-    id: Date.now(),
-    disciplina,
-    professor,
-    dia,
-    turno
+  window.excluirTurma = function (index) {
+    if (confirm("Deseja excluir esta turma?")) {
+      turmas.splice(index, 1);
+      localStorage.setItem("turmas", JSON.stringify(turmas));
+      renderizarTurmas();
+    }
   };
-
-  turmas.push(turma);
-  localStorage.setItem("turmas", JSON.stringify(turmas));
-
-  disciplinaInput.value = "";
-  professorInput.value = "";
-  diaInput.value = "";
-
-  formTurma.style.display = "none";
-  toast.success('Turma Cadastrada', `${disciplina} foi adicionada com sucesso!`);
-  renderizarTurmas();
-});
-
-// Renderizar lista
-
-function renderizarTurmas() {
-  if (turmas.length === 0) {
-    listaTurmas.innerHTML = "<p>Nenhuma turma cadastrada.</p>";
-    return;
-  }
-
-  listaTurmas.innerHTML = turmas
-    .map(
-      (t, i) => `
-      <div class="lista-turma">
-        <strong>${t.disciplina}</strong><br />
-        Professor: ${t.professor}<br />
-        Horário: ${t.dia}${t.turno.charAt(0)}<br />
-        <button onclick="excluirTurma(${i})">🗑️ Excluir</button>
-      </div>
-    `
-    )
-    .join("");
 }
 
-// Excluir turma
-window.excluirTurma = function (index) {
-  if (confirm("Deseja excluir esta turma?")) {
-    turmas.splice(index, 1);
-    localStorage.setItem("turmas", JSON.stringify(turmas));
-    renderizarTurmas();
-  }
-};
+inicializar();
+})();

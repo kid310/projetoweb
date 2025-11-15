@@ -1,15 +1,17 @@
-// Função para abrir os modais dinamicamente
 function abrirModal(modalName) {
+    const modalTitles = {
+        'admin': 'Turmas',
+        'alunos': 'Alunos',
+        'matricula': 'Matrícula'
+    };
+    
     fetch(`modais/${modalName}/${modalName}.html`)
         .then(response => response.text())
         .then(html => {
-            const oldScript = document.getElementById('modalScript');
-            if (oldScript) oldScript.remove();
-            document.getElementById('modalTitle').innerText = modalName.charAt(0).toUpperCase() + modalName.slice(1);
+            document.getElementById('modalTitle').innerText = modalTitles[modalName] || modalName.charAt(0).toUpperCase() + modalName.slice(1);
             document.getElementById('modalBody').innerHTML = html;
             const modal = new bootstrap.Modal(document.getElementById('modalContainer'));
             
-            // Fechar sidebar ao abrir modal
             const sidebar = document.getElementById('sidebar');
             const icon = document.getElementById('toggleIcon');
             if (!sidebar.classList.contains('collapsed')) {
@@ -18,10 +20,12 @@ function abrirModal(modalName) {
                 icon.classList.add('bi-chevron-right');
             }
             
-            // Adicione este listener
             modal._element.addEventListener('shown.bs.modal', () => {
+                const oldScript = document.getElementById('modalScript');
+                if (oldScript) oldScript.remove();
+                
                 const script = document.createElement('script');
-                script.src = `modais/${modalName}/${modalName}.js`;
+                script.src = `modais/${modalName}/${modalName}.js?t=${Date.now()}`;
                 script.id = 'modalScript';
                 document.body.appendChild(script);
             });
@@ -30,7 +34,6 @@ function abrirModal(modalName) {
         });
 }
 
-// Função para expandir ou recolher a sidebar
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const icon = document.getElementById('toggleIcon');

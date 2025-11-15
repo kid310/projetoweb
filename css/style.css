@@ -63,21 +63,6 @@ body {
     transform: scale(0.95);
 }
 
-/* Adicione no seu CSS */
-#calendar {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    padding: 20px;
-    margin-top: 20px;
-}
-
-.fc-toolbar {
-    background: #0066CC !important; /* Azul Unisinos */
-    padding: 15px;
-    color: white !important;
-}
-
 .fc-toolbar-title {
     color: white !important;
     font-weight: 600;
@@ -89,7 +74,7 @@ body {
 }
 
 .fc-col-header-cell {
-    background: #e9ecef !important; /* Cinza médio */
+    background: #e9ecef !important; 
     color: #495057;
     padding: 10px 0;
 }
@@ -100,7 +85,7 @@ body {
 }
 
 .fc-day-other {
-    background: #f1f3f5 !important; /* Cinza claro */
+    background: #f1f3f5 !important; 
     color: #868e96 !important;
 }
 
@@ -244,7 +229,7 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #0066CC !important;
 }
 
-/* ===== BANNER MATRÍCULAS ===== */
+
 .banner-matriculas {
     background: linear-gradient(135deg, #0066CC 0%, #003DA5 50%, #004a8d 100%);
     border-radius: 12px;
@@ -318,7 +303,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-right: 8px;
 }
 
-/* ===== SEÇÃO INFO ===== */
+
 .info-section {
     flex: 1;
 }
@@ -362,7 +347,6 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 0.95rem;
 }
 
-/* ===== CARDS DE ESTATÍSTICAS ===== */
 .stats-card {
     background: white;
     padding: 25px;
@@ -397,12 +381,12 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
-/* Background customizado para modal de matrícula */
+
 .modal-body {
     background: linear-gradient(135deg, #f0f5ff 0%, #e6f0ff 50%, #f8f9ff 100%) !important;
 }
 
-/* Padrão de fundo com elementos decorativos */
+
 .modal-matricula-bg {
     position: relative;
     overflow: hidden;

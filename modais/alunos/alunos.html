@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cadastro de Alunos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .btn-primary {
+      background-color: #0066CC !important;
+      border-color: #0066CC !important;
+    }
+    .btn-primary:hover {
+      background-color: #003DA5 !important;
+      border-color: #003DA5 !important;
+    }
+    h2, h4, h5, h6 {
+      color: #0066CC;
+    }
+    .table-success thead {
+      background-color: #0066CC !important;
+      color: white !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-4">
+    <h2>Alunos</h2>
+
+    <div class="mb-3 d-flex gap-2">
+      <input id="buscaAluno" type="text" class="form-control" placeholder="Buscar por nome ou CPF" />
+      <button id="btnNovoAluno" class="btn btn-primary">Novo Aluno</button>
+    </div>
+
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-success">
+        <tr>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Email</th>
+          <th>Telefone</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="listaAlunos"></tbody>
+    </table>
+  </div>
+
+  <div class="modal fade" id="modalAluno" tabindex="-1" aria-labelledby="modalAlunoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <form id="formAluno" class="modal-content needs-validation" novalidate>
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalAlunoLabel">Novo Aluno</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="indexAluno" />
+
+          <div class="mb-3">
+            <label for="nomeAluno" class="form-label">Nome completo *</label>
+            <input type="text" class="form-control" id="nomeAluno" name="nomeAluno" required />
+            <div class="invalid-feedback">Informe o nome completo.</div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="cpfAluno" class="form-label">CPF *</label>
+              <input type="text" class="form-control" id="cpfAluno" name="cpfAluno" placeholder="000.000.000-00" required />
+              <div class="invalid-feedback">Informe o CPF.</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="dataNascimento" class="form-label">Data de nascimento *</label>
+              <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" required />
+              <div class="invalid-feedback">Informe a data de nascimento.</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="email" class="form-label">Email *</label>
+              <input type="email" class="form-control" id="email" name="email" required />
+              <div class="invalid-feedback">Informe um email válido.</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="telefone" class="form-label">Telefone *</label>
+              <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(00) 00000-0000" required />
+              <div class="invalid-feedback">Informe o telefone.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="alunos.js"></script>
+</body>
+</html>

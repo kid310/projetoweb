@@ -246,11 +246,6 @@
     <div class="login-right">
         <div class="login-form-wrapper">
             <h2>Entrar</h2>
-            <p>Acesse sua conta para continuar</p>
-
-            <div class="demo-notice">
-                <strong>⚠️ Modo Demo:</strong> Use os campos abaixo para acessar o sistema. Campos com ícone 🔒 são somente leitura.
-            </div>
 
             <form id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
@@ -267,11 +262,6 @@
                     <i class="bi bi-lock"></i> Entrar no Sistema
                 </button>
             </form>
-
-            <div class="footer-text">
-                <p>Sistema de Gestão Acadêmica v1.0</p>
-                <p>Universidade Uniesquina</p>
-            </div>
         </div>
     </div>
 </div>
@@ -280,11 +270,10 @@
     function handleLogin(event) {
         event.preventDefault();
         
-        // Usar a parte do email antes do @ como nome de usuário
+    
         const email = document.getElementById('email').value;
         const nomeUsuario = email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1);
         
-        // Salvar nome do usuário no localStorage
         localStorage.setItem('nomeUsuario', nomeUsuario);
         
         // Redirecionar para o dashboard

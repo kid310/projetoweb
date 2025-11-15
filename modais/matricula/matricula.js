@@ -1,111 +1,93 @@
+(function() {
 const $ = (id) => document.getElementById(id);
 
-// Elementos
-const listaMatriculasEl = $('listaMatriculas');
-const buscaMatriculaEl = $('buscaMatricula');
-const btnNovaMatriculaEl = $('btnNovaMatricula');
-const formMatricula = $('formMatricula');
-const turmaMatriculaEl = $('turmaMatricula');
-
 let matriculas = JSON.parse(localStorage.getItem('matriculas')) || [];
+let alunos = JSON.parse(localStorage.getItem('alunos')) || [];
 let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+let disciplinasTemporarias = [];
+let matriculaEmEdicao = null;
 
-// Modal
-let modalMatricula = null;
+function carregarAlunos() {
+  const alunoSelect = $('alunoMatricula');
+  if (!alunoSelect) return;
+  
+  alunoSelect.innerHTML = '<option value="">Escolha um aluno</option>';
+  
+  alunos.forEach((aluno, index) => {
+    const option = document.createElement('option');
+    option.value = index;
+    option.textContent = `${aluno.nome} (${aluno.cpf})`;
+    alunoSelect.appendChild(option);
+  });
+}
 
-// Inicializar modal
-window.addEventListener('DOMContentLoaded', () => {
-  modalMatricula = new bootstrap.Modal($('modalMatricula'));
-  carregarTurmas();
-  renderizarMatriculas();
-});
-
-// Carregar turmas no select
 function carregarTurmas() {
-  turmaMatriculaEl.innerHTML = '<option value="">Selecione uma turma</option>';
+  const turmaSelect = $('turmaMatricula');
+  if (!turmaSelect) return;
+  
+  turmaSelect.innerHTML = '<option value="">Escolha uma disciplina</option>';
   
   turmas.forEach((turma, index) => {
     const option = document.createElement('option');
     option.value = index;
-    option.textContent = `${turma.disciplina} - ${turma.professor} (${turma.dia})`;
-    turmaMatriculaEl.appendChild(option);
+    option.textContent = `${turma.disciplina} - ${turma.professor}`;
+    turmaSelect.appendChild(option);
   });
 }
 
-// Abrir modal para nova matrícula
-btnNovaMatriculaEl.addEventListener('click', () => {
-  limparFormulario();
-  $('modalMatriculaLabel').textContent = 'Nova Matrícula';
-  modalMatricula.show();
-});
-
-// Limpar formulário
-function limparFormulario() {
-  formMatricula.reset();
-  $('indexMatricula').value = '';
-  formMatricula.classList.remove('was-validated');
-}
-
-// Salvar matrícula
-formMatricula.addEventListener('submit', (e) => {
-  e.preventDefault();
+function renderizarDisciplinas() {
+  const listaDisciplinasEl = $('listaDisciplinas');
+  if (!listaDisciplinasEl) return;
   
-  if (!formMatricula.checkValidity()) {
-    formMatricula.classList.add('was-validated');
+  listaDisciplinasEl.innerHTML = '';
+  
+  if (disciplinasTemporarias.length === 0) {
+    listaDisciplinasEl.innerHTML = '<tr><td colspan="3" class="text-center text-muted">Nenhuma disciplina adicionada</td></tr>';
     return;
   }
 
-  const index = $('indexMatricula').value;
-  const novaMatricula = {
-    numeroMatricula: `MAT${Date.now()}`,
-    nomeAluno: $('nomeAluno').value.trim(),
-    cpf: $('cpfAluno').value.trim(),
-    dataNascimento: $('dataNascimento').value,
-    email: $('email').value.trim(),
-    telefone: $('telefone').value.trim(),
-    turma: parseInt($('turmaMatricula').value),
-    dataMatricula: $('dataMatricula').value,
-    status: $('statusMatricula').value,
-    observacoes: $('observacoes').value.trim()
-  };
+  disciplinasTemporarias.forEach((disciplina, i) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${disciplina.nome}</td>
+      <td>${disciplina.professor}</td>
+      <td>
+        <button class="btn btn-sm btn-danger" onclick="removerDisciplina(${i})">✕</button>
+      </td>
+    `;
+    listaDisciplinasEl.appendChild(row);
+  });
+}
 
-  if (index === '') {
-    matriculas.push(novaMatricula);
-  } else {
-    matriculas[index] = novaMatricula;
-  }
-
-  localStorage.setItem('matriculas', JSON.stringify(matriculas));
-  renderizarMatriculas();
-  modalMatricula.hide();
-  limparFormulario();
-});
-
-// Renderizar lista de matrículas
 function renderizarMatriculas(filtro = '') {
-  listaMatriculasEl.innerHTML = '';
+  const listaEl = $('listaMatriculas');
+  if (!listaEl) return;
+  
+  listaEl.innerHTML = '';
   filtro = filtro.toLowerCase();
 
   const matriculasFiltradas = matriculas.filter(m => 
-    m.nomeAluno.toLowerCase().includes(filtro) || 
+    m.alunoNome.toLowerCase().includes(filtro) || 
     m.numeroMatricula.toLowerCase().includes(filtro)
   );
 
   if (matriculasFiltradas.length === 0) {
-    listaMatriculasEl.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhuma matrícula cadastrada</td></tr>';
+    listaEl.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Nenhuma matrícula registrada</td></tr>';
     return;
   }
 
-  matriculasFiltradas.forEach((matricula, index) => {
+  matriculasFiltradas.forEach((matricula) => {
     const realIndex = matriculas.indexOf(matricula);
-    const turma = turmas[matricula.turma];
     const statusBadge = getStatusBadge(matricula.status);
+    const disciplinasTexto = (matricula.disciplinas && matricula.disciplinas.length > 0) 
+      ? matricula.disciplinas.map(d => d.nome).join(', ')
+      : 'N/A';
     
     const row = document.createElement('tr');
     row.innerHTML = `
       <td><strong>${matricula.numeroMatricula}</strong></td>
-      <td>${matricula.nomeAluno}</td>
-      <td>${turma ? turma.disciplina : 'N/A'}</td>
+      <td>${matricula.alunoNome}</td>
+      <td>${disciplinasTexto}</td>
       <td>${formatarData(matricula.dataMatricula)}</td>
       <td>${statusBadge}</td>
       <td>
@@ -113,11 +95,10 @@ function renderizarMatriculas(filtro = '') {
         <button class="btn btn-sm btn-danger" onclick="excluirMatricula(${realIndex})">🗑️ Excluir</button>
       </td>
     `;
-    listeMatriculasEl.appendChild(row);
+    listaEl.appendChild(row);
   });
 }
 
-// Badge de status
 function getStatusBadge(status) {
   const statusMap = {
     'ativa': '<span class="badge bg-success">Ativa</span>',
@@ -127,44 +108,173 @@ function getStatusBadge(status) {
   return statusMap[status] || status;
 }
 
-// Formatar data
 function formatarData(data) {
   if (!data) return '';
-  const d = new Date(data);
+  const d = new Date(data + 'T00:00:00');
   const dia = String(d.getDate()).padStart(2, '0');
   const mes = String(d.getMonth() + 1).padStart(2, '0');
   const ano = d.getFullYear();
   return `${dia}/${mes}/${ano}`;
 }
 
-// Editar matrícula
-window.editarMatricula = function(index) {
-  const matricula = matriculas[index];
-  $('indexMatricula').value = index;
-  $('nomeAluno').value = matricula.nomeAluno;
-  $('cpfAluno').value = matricula.cpf;
-  $('dataNascimento').value = matricula.dataNascimento;
-  $('email').value = matricula.email;
-  $('telefone').value = matricula.telefone;
-  $('turmaMatricula').value = matricula.turma;
-  $('dataMatricula').value = matricula.dataMatricula;
-  $('statusMatricula').value = matricula.status;
-  $('observacoes').value = matricula.observacoes;
+function atualizarBotaoFinalizar() {
+  const btnFinalizar = $('btnFinalizarMatricula');
+  if (matriculaEmEdicao !== null) {
+    btnFinalizar.textContent = '💾 Salvar Alterações';
+  } else {
+    btnFinalizar.textContent = '💾 Finalizar Matrícula';
+  }
+}
+
+function limparFormulario() {
+  $('alunoMatricula').value = '';
+  $('alunoMatricula').disabled = false;
+  $('dataMatricula').value = '';
+  $('statusMatricula').value = 'ativa';
+  $('turmaMatricula').value = '';
+  disciplinasTemporarias = [];
+  matriculaEmEdicao = null;
+  renderizarDisciplinas();
+  atualizarBotaoFinalizar();
+}
+
+function inicializar() {
+  const btnAdicionarDisciplina = $('btnAdicionarDisciplina');
+  const btnFinalizarMatricula = $('btnFinalizarMatricula');
+  const buscaInput = $('buscaMatricula');
+  const alunoSelect = $('alunoMatricula');
   
-  $('modalMatriculaLabel').textContent = 'Editar Matrícula';
-  modalMatricula.show();
+  if (!btnAdicionarDisciplina || !btnFinalizarMatricula || !buscaInput) return;
+  
+  // Recarregar dados do localStorage sempre que a modal abrir
+  alunos = JSON.parse(localStorage.getItem('alunos')) || [];
+  turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+  matriculas = JSON.parse(localStorage.getItem('matriculas')) || [];
+  
+  carregarAlunos();
+  carregarTurmas();
+  renderizarMatriculas();
+  renderizarDisciplinas();
+
+  btnAdicionarDisciplina.addEventListener('click', () => {
+    const alunoIndex = parseInt($('alunoMatricula').value);
+    const dataMatricula = $('dataMatricula').value;
+    const turmaIndex = parseInt($('turmaMatricula').value);
+    
+    if (isNaN(alunoIndex) || !dataMatricula) {
+      alert('Por favor, selecione um aluno e informe a data!');
+      return;
+    }
+
+    if (isNaN(turmaIndex)) {
+      alert('Por favor, selecione uma disciplina!');
+      return;
+    }
+
+    const turma = turmas[turmaIndex];
+    const jaAdicionada = disciplinasTemporarias.some(d => d.index === turmaIndex);
+    
+    if (jaAdicionada) {
+      alert('Esta disciplina já foi adicionada!');
+      return;
+    }
+
+    disciplinasTemporarias.push({
+      index: turmaIndex,
+      nome: turma.disciplina,
+      professor: turma.professor,
+      dia: turma.dia,
+      turno: turma.turno
+    });
+
+    $('turmaMatricula').value = '';
+    renderizarDisciplinas();
+  });
+
+  btnFinalizarMatricula.addEventListener('click', () => {
+    if (disciplinasTemporarias.length === 0) {
+      alert('Adicione pelo menos uma disciplina!');
+      return;
+    }
+
+    const alunoIndex = parseInt($('alunoMatricula').value);
+    const dataMatricula = $('dataMatricula').value;
+    const status = $('statusMatricula').value;
+    const aluno = alunos[alunoIndex];
+
+    if (matriculaEmEdicao !== null) {
+      // Atualizar matrícula existente
+      matriculas[matriculaEmEdicao].dataMatricula = dataMatricula;
+      matriculas[matriculaEmEdicao].status = status;
+      matriculas[matriculaEmEdicao].disciplinas = [...disciplinasTemporarias];
+      localStorage.setItem('matriculas', JSON.stringify(matriculas));
+      alert(`Matrícula ${matriculas[matriculaEmEdicao].numeroMatricula} atualizada com sucesso!`);
+    } else {
+      // Criar nova matrícula
+      const novaMatricula = {
+        numeroMatricula: `MAT${Date.now()}`,
+        alunoIndex: alunoIndex,
+        alunoNome: aluno.nome,
+        dataMatricula: dataMatricula,
+        status: status,
+        disciplinas: [...disciplinasTemporarias]
+      };
+
+      matriculas.push(novaMatricula);
+      localStorage.setItem('matriculas', JSON.stringify(matriculas));
+      alert(`Matrícula ${novaMatricula.numeroMatricula} criada com sucesso!`);
+    }
+
+    limparFormulario();
+    renderizarMatriculas();
+  });
+
+  buscaInput.addEventListener('input', () => {
+    renderizarMatriculas(buscaInput.value);
+  });
+}
+
+window.removerDisciplina = function(index) {
+  disciplinasTemporarias.splice(index, 1);
+  renderizarDisciplinas();
 };
 
-// Excluir matrícula
+window.editarMatricula = function(index) {
+  const matricula = matriculas[index];
+  
+  // Carregar dados da matrícula no formulário
+  $('alunoMatricula').value = matricula.alunoIndex;
+  $('alunoMatricula').disabled = true;
+  $('dataMatricula').value = matricula.dataMatricula;
+  $('statusMatricula').value = matricula.status;
+  
+  // Carregar disciplinas
+  disciplinasTemporarias = matricula.disciplinas.map(d => ({...d}));
+  renderizarDisciplinas();
+  
+  // Marcar como em edição
+  matriculaEmEdicao = index;
+  atualizarBotaoFinalizar();
+  
+  // Scroll para o topo do formulário
+  window.scrollTo(0, 0);
+};
+
 window.excluirMatricula = function(index) {
   if (confirm('Deseja excluir esta matrícula?')) {
+    const numeroMatricula = matriculas[index].numeroMatricula;
     matriculas.splice(index, 1);
     localStorage.setItem('matriculas', JSON.stringify(matriculas));
+    alert(`Matrícula ${numeroMatricula} excluída com sucesso!`);
     renderizarMatriculas();
   }
 };
 
-// Busca em tempo real
-buscaMatriculaEl.addEventListener('input', () => {
-  renderizarMatriculas(buscaMatriculaEl.value);
-});
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializar);
+} else {
+  inicializar();
+}
+})();
+
+

@@ -21,46 +21,11 @@
       background-color: #0066CC !important;
       color: white !important;
     }
-    
-    /* Background decorativo */
-    .modal-matricula-bg {
-      position: relative;
-      overflow: visible;
-      background: linear-gradient(135deg, #f0f5ff 0%, #e6f0ff 50%, #f8f9ff 100%);
-    }
-    
-    .modal-matricula-bg .modal-body {
-      background: linear-gradient(135deg, #f0f5ff 0%, #e6f0ff 50%, #f8f9ff 100%);
-      position: relative;
-    }
-    
-    .modal-matricula-bg .modal-body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle, rgba(0, 102, 204, 0.15) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    
-    .modal-matricula-bg .modal-body::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 250px;
-      height: 250px;
-      background: radial-gradient(circle, rgba(0, 61, 165, 0.1) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    
-    .modal-body > * {
-      position: relative;
-      z-index: 1;
+    .card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
     }
   </style>
 </head>
@@ -68,17 +33,72 @@
   <div class="container mt-4">
     <h2>Matrículas</h2>
 
-    <div class="mb-3 d-flex gap-2">
+    <div class="card">
+      <h5>Criar Nova Matrícula</h5>
+      
+      <div class="mb-3">
+        <label for="alunoMatricula" class="form-label">Selecione o Aluno *</label>
+        <select class="form-select" id="alunoMatricula" required>
+          <option value="">Escolha um aluno</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="dataMatricula" class="form-label">Data de Matrícula *</label>
+            <input type="date" class="form-control" id="dataMatricula" required />
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="statusMatricula" class="form-label">Status *</label>
+            <select class="form-select" id="statusMatricula" required>
+              <option value="ativa">Ativa</option>
+              <option value="trancada">Trancada</option>
+              <option value="cancelada">Cancelada</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="turmaMatricula" class="form-label">Adicionar Disciplina *</label>
+        <div class="input-group">
+          <select class="form-select" id="turmaMatricula" required>
+            <option value="">Escolha uma disciplina</option>
+          </select>
+          <button id="btnAdicionarDisciplina" class="btn btn-primary" type="button">➕ Adicionar</button>
+        </div>
+      </div>
+
+      <h6>Disciplinas da Matrícula</h6>
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>Disciplina</th>
+            <th>Professor</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="listaDisciplinas"></tbody>
+      </table>
+
+      <button id="btnFinalizarMatricula" class="btn btn-success">💾 Finalizar Matrícula</button>
+    </div>
+
+    <h5>Matrículas Registradas</h5>
+    <div class="mb-3">
       <input id="buscaMatricula" type="text" class="form-control" placeholder="Buscar por nome ou matrícula" />
-      <button id="btnNovaMatricula" class="btn btn-primary">Nova Matrícula</button>
     </div>
 
     <table class="table table-bordered table-hover align-middle">
       <thead class="table-success">
         <tr>
           <th>Número Matrícula</th>
-          <th>Nome do Aluno</th>
-          <th>Turma</th>
+          <th>Aluno</th>
+          <th>Disciplinas</th>
           <th>Data Matrícula</th>
           <th>Status</th>
           <th>Ações</th>
@@ -88,97 +108,8 @@
     </table>
   </div>
 
-  <!-- Modal de Matrícula -->
-  <div class="modal fade" id="modalMatricula" tabindex="-1" aria-labelledby="modalMatriculaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <form id="formMatricula" class="modal-content needs-validation modal-matricula-bg" novalidate>
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalMatriculaLabel">Nova Matrícula</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" id="indexMatricula" />
-
-          <h6>Dados do Aluno</h6>
-
-          <div class="mb-3">
-            <label for="nomeAluno" class="form-label">Nome completo *</label>
-            <input type="text" class="form-control" id="nomeAluno" name="nomeAluno" required />
-            <div class="invalid-feedback">Informe o nome completo.</div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="cpfAluno" class="form-label">CPF *</label>
-              <input type="text" class="form-control" id="cpfAluno" name="cpfAluno" placeholder="000.000.000-00" required />
-              <div class="invalid-feedback">Informe o CPF.</div>
-            </div>
-
-            <div class="col-md-6 mb-3">
-              <label for="dataNascimento" class="form-label">Data de nascimento *</label>
-              <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" required />
-              <div class="invalid-feedback">Informe a data de nascimento.</div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="email" class="form-label">Email *</label>
-              <input type="email" class="form-control" id="email" name="email" required />
-              <div class="invalid-feedback">Informe um email válido.</div>
-            </div>
-
-            <div class="col-md-6 mb-3">
-              <label for="telefone" class="form-label">Telefone *</label>
-              <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(00) 00000-0000" required />
-              <div class="invalid-feedback">Informe o telefone.</div>
-            </div>
-          </div>
-
-          <hr>
-          <h6>Dados de Matrícula</h6>
-
-          <div class="mb-3">
-            <label for="turmaMatricula" class="form-label">Turma *</label>
-            <select class="form-select" id="turmaMatricula" name="turmaMatricula" required>
-              <option value="">Selecione uma turma</option>
-            </select>
-            <div class="invalid-feedback">Selecione uma turma.</div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="dataMatricula" class="form-label">Data de Matrícula *</label>
-              <input type="date" class="form-control" id="dataMatricula" name="dataMatricula" required />
-              <div class="invalid-feedback">Informe a data de matrícula.</div>
-            </div>
-
-            <div class="col-md-6 mb-3">
-              <label for="statusMatricula" class="form-label">Status *</label>
-              <select class="form-select" id="statusMatricula" name="statusMatricula" required>
-                <option value="ativa">Ativa</option>
-                <option value="trancada">Trancada</option>
-                <option value="cancelada">Cancelada</option>
-              </select>
-              <div class="invalid-feedback">Selecione um status.</div>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="observacoes" class="form-label">Observações</label>
-            <textarea class="form-control" id="observacoes" name="observacoes" rows="3"></textarea>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Salvar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="matricula.js"></script>
 </body>
 </html>
+
